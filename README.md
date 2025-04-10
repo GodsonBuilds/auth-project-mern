@@ -20,3 +20,6 @@ jsonwebtoken (JWT) → Gère l’authentification avec des tokens JWT.
 mongoose → ORM pour interagir avec une base de données MongoDB.
 
 nodemailer → Permet l’envoi d’e-mails depuis le backend.
+
+npm install jsonwebtoken --> generer token jwt
+npm install uuid
