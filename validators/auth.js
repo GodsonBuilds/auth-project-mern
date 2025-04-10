@@ -17,6 +17,13 @@ const registerSchema = Joi.object({
     'any.only': 'Les mots de passe ne correspondent pas',
     'string.empty': 'La confirmation du mot de passe est requise',
   }),
+  numero: Joi.string()
+  .pattern(/^\+?[1-9]\d{7,14}$/)
+  .allow('')
+  .optional()
+  .messages({
+    'string.pattern.base': 'Le numéro doit être au format international, ex: +33612345678',
+  }),
 });
 
 // Schéma pour la connexion

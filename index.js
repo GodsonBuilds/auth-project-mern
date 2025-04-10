@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const mongoose = require('mongoose');
 const authRouter = require('./routers/authRouter');
+const profileRouter = require('./routers/profileRouter');
+
 
 app.use(cors({
     origin: '*', // toutes les origines
@@ -34,6 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRouter);
+app.use('/api/profile', profileRouter); 
 
 app.get('/', (req, res) => { 
     res.json({message:"Hello from the server"});
