@@ -65,7 +65,7 @@ exports.confirmOtp = async (req, res) => {
     }
   };
 
-  nexports.resetPassword = async (req, res) => {
+  exports.resetPassword = async (req, res) => {
       
       // 1. Validation des données
       const { error, value } = resetPasswordSchema.validate(req.body, { abortEarly: false });
