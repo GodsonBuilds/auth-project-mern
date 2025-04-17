@@ -48,7 +48,7 @@ const UserSchema = new mongoose.Schema(
       select: false,
     },
     verificationCodeValidation: {
-      type: String, // Changer de Number à String pour éviter les erreurs
+      type: Date, // Changer de Number à String pour éviter les erreurs
       select: false,
     },
     forgotPasswordCode: {

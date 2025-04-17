@@ -28,7 +28,7 @@ exports.updateProfile = async (req, res) => {
         const messages = error.details.map(err => err.message);
         return res.status(400).json({ message: 'Validation échouée', errors: messages });
       }
-    const { name, email } = value;
+    const { name, email, numero } = value;
   
     try {
       // Vérifie que l'utilisateur existe
@@ -38,9 +38,9 @@ exports.updateProfile = async (req, res) => {
       }
   
       // Met à jour les champs du profil
-      if (value.name !== undefined) user.name = value.name;
-      if (value.email !== undefined) user.email = value.email;
-      if (value.numero !== undefined) user.numero = value.numero; // autorise aussi vide ("")
+      if (name !== undefined) user.name = value.name;
+      if (email !== undefined) user.email = value.email;
+      if (numero !== undefined) user.numero = value.numero; // autorise aussi vide ("")
   
       // Sauvegarde les modifications
       await user.save();

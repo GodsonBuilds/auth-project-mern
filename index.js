@@ -7,6 +7,7 @@ const app = express();
 const mongoose = require('mongoose');
 const authRouter = require('./routers/authRouter');
 const profileRouter = require('./routers/profileRouter');
+const postRouter = require('./routers/postRouter');
 
 
 app.use(cors({
@@ -17,7 +18,6 @@ app.use(cors({
   
 app.use(helmet())
 app.use(cookieParser())
-
 
 
 //Connexion à mongoose
@@ -37,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/auth', authRouter);
 app.use('/api/profile', profileRouter); 
+app.use('/api/posts', postRouter); 
 
 app.get('/', (req, res) => { 
     res.json({message:"Hello from the server"});

@@ -29,3 +29,9 @@ npm install uuid  -->token verify-email
 - Récupère tes clés d’API : cloud_name, api_key, api_secret
 - Installe le package cloudinary : 
 - npm install cloudinary multer multer-storage-cloudinary
+---------------------------------------------------
+🧠 **Objectif de cette étape** :
+- Comprendre comment relier deux collections (ex: User et Post)
+- Faire un CRUD complet sur les posts
+- Utiliser Mongoose pour les relations (avec populate)
+- Et plus tard, explorer l'Aggregation Framework pour faire des requêtes plus puissantes

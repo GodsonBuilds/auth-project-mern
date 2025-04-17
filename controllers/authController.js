@@ -74,9 +74,8 @@ exports.register = async (req, res) => {
        verificationCode,  
       verificationCodeValidation: expiresDate
    });
-    
       await newUser.save();
-
+      
       // Envoi de l'email de vérification
     await sendVerificationEmail(email, verificationCode, newUser._id);
 
@@ -225,5 +224,38 @@ exports.confirmOtp = async (req, res) => {
       res.status(500).json({ message: "Erreur serveur." });
     }
   };
+
+  exports.resendVerificationEmail = async (req, res) => {
+    const { email } = req.body;
+  
+    try {
+      const user = await User.findOne({ email }).select('+verified');
+  
+      if (!user) {
+        return res.status(404).json({ message: "Utilisateur introuvable" });
+      }
+  
+      if (user.verified) {
+        return res.status(400).json({ message: "Ce compte est déjà vérifié." });
+      }
+  
+      // Nouveau token + nouvelle expiration
+      const verificationCode = uuidv4();
+      const expiresDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  
+      user.verificationCode = verificationCode;
+      user.verificationCodeValidation = expiresDate;
+      await user.save();
+  
+      await sendVerificationEmail(user.email, verificationCode, user._id);
+  
+      res.json({ message: "Un nouvel email de vérification a été envoyé." });
+  
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Erreur serveur" });
+    }
+  };
+  
   
 
