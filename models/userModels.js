@@ -19,6 +19,15 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: ''
     },
+    avatar: {
+      type: String, // URL de l'image stockée sur Cloudinary
+      default: '', // ou tu laisses vide
+    },
+    avatarPublicId: {
+      type: String,
+      default: "",
+    },
+    
     password: {
       type: String,
       required: [true, "Le mot de passe est requis"],

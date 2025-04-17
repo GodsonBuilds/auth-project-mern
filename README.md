@@ -22,4 +22,10 @@ mongoose → ORM pour interagir avec une base de données MongoDB.
 nodemailer → Permet l’envoi d’e-mails depuis le backend.
 
 npm install jsonwebtoken --> generer token jwt
-npm install uuid
+npm install uuid  -->token verify-email
+ **ajouter une image de profil à un utilisateur**
+ - Va sur https://cloudinary.com/
+- Crée un compte gratuit
+- Récupère tes clés d’API : cloud_name, api_key, api_secret
+- Installe le package cloudinary : 
+- npm install cloudinary multer multer-storage-cloudinary
