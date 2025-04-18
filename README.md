@@ -30,8 +30,15 @@ npm install uuid  -->token verify-email
 - Installe le package cloudinary : 
 - npm install cloudinary multer multer-storage-cloudinary
 ---------------------------------------------------
-🧠 **Objectif de cette étape** :
+🧠 **Objectif de cette étape 2** :
 - Comprendre comment relier deux collections (ex: User et Post)
 - Faire un CRUD complet sur les posts
 - Utiliser Mongoose pour les relations (avec populate)
-- Et plus tard, explorer l'Aggregation Framework pour faire des requêtes plus puissantes
+
+🧠 **Objectif de cette étape 3** :
+✅ Gérer les rôles
+📸 Gérer plusieurs images
+💬 Ajouter les commentaires + thread
+❤️ Gérer les likes/dislikes
+📌 Gérer les favoris
+📊 Créer des stats et validation côté admin

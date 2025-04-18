@@ -12,15 +12,31 @@ const PostSchema = new mongoose.Schema(
       required: [true, "Le contenu est requis"],
     },
 
-    image: {
-        type: String,
-        default: "",
+    images: [ // Un post peut avoir plusieurs images
+      {
+        url: { type: String },
+        public_id: { type: String }
+      }
+    ],
+    
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending"
     },
     
-     postPublicId: {
-      type: String,
-      default: "",
-    },
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ],
+    dislikes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ],
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // Référence à la collection User

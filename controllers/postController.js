@@ -10,26 +10,33 @@ exports.createPost = async (req, res) => {
       const { error, value } = createPostSchema.validate(req.body, { abortEarly: false });
 
       if (error) {
-          // Supprimer l'image uploadée si validation échouée
-      if (req.file && req.file.filename) {
-        await cloudinary.uploader.destroy(req.file.filename);
-      } 
+          // Supprimer les images uploadées si validation échouée
+          if (post.images?.length) {
+            for (let img of post.images) {
+              if (img.public_id) {
+                await cloudinary.uploader.destroy(img.public_id);
+              }
+            }
+          }
+          
         const messages = error.details.map((err) => err.message);
         return res.status(400).json({ message: 'Validation échouée', errors: messages });
       } 
     
     const { title, content } = value;
 
-    const imageUrl = req.file?.path || "";
-    const publicId = req.file?.filename || "";
-
+    const images = req.files?.map(file => ({
+      url: file.path,
+      public_id: file.filename,
+    })) || [];
+    
     const newPost = new Post({
       title,
       content,
-     image: imageUrl,
-     publicId,
+      images,
       author: req.user._id,
     });
+    
 
     const savedPost = await newPost.save();
 
@@ -59,14 +66,18 @@ exports.getAllPosts = async (req, res) => {
       perPage = 10,
       search = "",
       dateFrom = "",
-      dateTo = ""
+      dateTo = "",
+      status = "",
     } = req.query;
 
     const pageInt = parseInt(page);
     const perPageInt = parseInt(perPage);
 
     const searchFilter = {};
-
+    searchFilter.status = "approved";
+    if (status) {
+      searchFilter.status = status; 
+    }
     // Recherche par titre ou nom d’auteur
     if (search) {
       const matchingUsers = await User.find({
@@ -152,12 +163,22 @@ exports.updatePost = async (req, res) => {
     post.title = value.title || post.title;
     post.content = value.content || post.content;
 
-    if (post.postPublicId) {
-           await cloudinary.uploader.destroy(post.postPublicId);
-     }
+// Supprimer anciennes images
+if (post.images?.length) {
+  for (let img of post.images) {
+    if (img.public_id) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+  }
+}
 
-     post.image = req.file.path;
-     post.postPublicId = req.file.filename;
+// Ajouter les nouvelles
+const newImages = req.files?.map(file => ({
+  url: file.path,
+  public_id: file.filename,
+})) || [];
+
+post.images = newImages;
 
 
     const updated = await post.save();
@@ -189,11 +210,16 @@ exports.deletePost = async (req, res) => {
         return res.status(403).json({ message: "Non autorisé à supprimer ce post" });
       }
   
-      // Supprimer image sur Cloudinary si elle existe
-      if (post.postPublicId) {
-        await cloudinary.uploader.destroy(post.postPublicId);
+      // Supprimer les images de Cloudinary
+      // Vérifier si le post a des images
+      if (post.images?.length) {
+        for (let img of post.images) {
+          if (img.public_id) {
+            await cloudinary.uploader.destroy(img.public_id);
+          }
+        }
       }
-  
+      
       // Supprimer le post de la base de données
       await post.deleteOne();
   
