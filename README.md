@@ -42,3 +42,8 @@ npm install uuid  -->token verify-email
 ❤️ Gérer les likes/dislikes
 📌 Gérer les favoris
 📊 Créer des stats et validation côté admin
+
+🧠 **Bon à savoir :**
+- upload.single("field") → pour 1 seul fichier
+- upload.array("field", max) → pour plusieurs fichiers sur le même champ
+- upload.fields([{ name, maxCount }]) → pour plusieurs champs de fichiers

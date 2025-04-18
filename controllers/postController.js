@@ -11,11 +11,9 @@ exports.createPost = async (req, res) => {
 
       if (error) {
           // Supprimer les images uploadées si validation échouée
-          if (post.images?.length) {
-            for (let img of post.images) {
-              if (img.public_id) {
-                await cloudinary.uploader.destroy(img.public_id);
-              }
+          if (req.files?.length) {
+            for (let file of req.files) {
+              await cloudinary.uploader.destroy(file.filename); // car file.filename = public_id
             }
           }
           
@@ -143,9 +141,12 @@ exports.updatePost = async (req, res) => {
     const { error, value } = updatePostSchema.validate(req.body, { abortEarly: false });
     if (error) {
         // Supprimer l'image uploadée si validation échouée
-  if (req.file && req.file.filename) {
-    await cloudinary.uploader.destroy(req.file.filename);
-  }
+        if (req.files?.length) {
+          for (let file of req.files) {
+            await cloudinary.uploader.destroy(file.filename); // car file.filename = public_id
+          }
+        }
+
       const messages = error.details.map(err => err.message);
       return res.status(400).json({ message: "Validation échouée", errors: messages });
     }
@@ -163,23 +164,25 @@ exports.updatePost = async (req, res) => {
     post.title = value.title || post.title;
     post.content = value.content || post.content;
 
-// Supprimer anciennes images
-if (post.images?.length) {
-  for (let img of post.images) {
-    if (img.public_id) {
-      await cloudinary.uploader.destroy(img.public_id);
+// Verifie si il y a des images uploadées
+if (req.files?.length) {
+  // Supprimer les anciennes images si il y en a
+  if (post.images?.length) {
+    for (let img of post.images) {
+      if (img.public_id) {
+        await cloudinary.uploader.destroy(img.public_id);
+      }
     }
   }
+
+  // Ajouter les nouvelles
+  const newImages = req.files.map(file => ({
+    url: file.path,
+    public_id: file.filename,
+  }));
+
+  post.images = newImages;
 }
-
-// Ajouter les nouvelles
-const newImages = req.files?.map(file => ({
-  url: file.path,
-  public_id: file.filename,
-})) || [];
-
-post.images = newImages;
-
 
     const updated = await post.save();
 

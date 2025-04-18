@@ -1,4 +1,3 @@
-// middlewares/cloudinaryPostUpload.js
 const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require("../utils/cloudinary");
@@ -12,6 +11,9 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const uploadPostImage = multer({ storage });
+const uploadPostImage = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
+});
 
 module.exports = uploadPostImage;
